@@ -1,0 +1,1 @@
+# coinpayments-shopware

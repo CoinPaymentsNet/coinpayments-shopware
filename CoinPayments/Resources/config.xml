@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element type="text" scope="locale">
+            <name>coinpaymentsMerchantId</name>
+            <label lang="en">Merchant Id</label>
+            <label lang="de">Händler Id</label>
+            <description lang="en">Merchant id from coinpayments account</description>
+            <description lang="de">Händler-ID aus dem coinpayments für münzzahlungen</description>
+        </element>
+        <element type="select" scope="locale">
+            <name>coinpaymentsPayout</name>
+            <label lang="en">Payout Currency</label>
+            <label lang="de">Payout Currency</label>
+            <store><![CDATA[Ext.define('Coinpayments.Coinpayments.Form', {
+                    extend: 'Ext.data.Store',
+                    autoLoad: true,
+                    pageSize: 2000,
+                    proxy: {
+                        type: 'ajax',
+                        url: window.location.href.substr(0, window.location.href.indexOf('backend')) + 'backend/coinpayments/getRates',
+                        reader: {
+                            type: 'json',
+                            root: 'data',
+                            totalProperty: 'total'
+                        }
+                    }
+                    }).create();//new ]]>
+            </store>
+        </element>
+        <element type="text" scope="locale">
+            <name>coinpaymentsIpnSecret</name>
+            <label lang="en">Ipn Secret</label>
+            <label lang="de">Ipn Secret</label>
+            <description lang="en">Ipn Secret from coinpayments account</description>
+            <description lang="de">Ipn Secret aus dem coinpayments für münzzahlungen</description>
+        </element>
+        <element type="text" scope="locale">
+            <name>coinpaymentsSecretKey</name>
+            <label lang="en">Secret Key</label>
+            <label lang="de">Geheimer Schlüssel</label>
+            <description lang="en">Secret Key from coinpayments account</description>
+            <description lang="de">Geheimer Schlüssel aus dem coinpayments für münzzahlungen</description>
+        </element>
+        <element type="text" scope="locale">
+            <name>coinpaymentsPublicKey</name>
+            <label lang="en">Public Key</label>
+            <label lang="de">Öffentlichkeit Schlüssel</label>
+            <description lang="en">Public Key from coinpayments account</description>
+            <description lang="de">Öffentlichkeit Schlüssel aus dem coinpayments für münzzahlungen</description>
+        </element>
+        <element type="boolean" scope="locale">
+            <name>coinpaymentsIpnDebug</name>
+            <label lang="en">IPN Debug Email</label>
+            <label lang="de">IPN-Debug-E-Mail</label>
+            <value>false</value>
+        </element>
+        <element type="boolean" scope="locale">
+            <name>coinpaymentsDebug</name>
+            <label lang="en">Debug Mode</label>
+            <label lang="de">Debug-Modus</label>
+            <value>true</value>
+        </element>
+    </elements>
+</config>
