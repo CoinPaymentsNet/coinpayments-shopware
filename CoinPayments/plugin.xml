@@ -4,10 +4,10 @@
     <label lang="de">CoinPayments</label>
     <label lang="en">CoinPayments</label>
     <version>1.0.0</version>
-    <copyright>(c) by Shopware AG</copyright>
+    <copyright></copyright>
     <license>proprietary</license>
-    <link>http://store.shopware.com</link>
-    <author>Shopware AG</author>
+    <link>http://coinpayments.net</link>
+    <author>Peter Vaida</author>
 
     <compatibility minVersion="5.2.0" />
 
