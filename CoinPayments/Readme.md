@@ -1,7 +1,12 @@
-# CoinPayments
-## About CoinPayments
-This skeleton contains a License file, fileheader and a basic README.
+<h3>Install via FTP</h3>
+1. Download plugin
 
-## License
+2. Upload plugin to "Base Dir"/custom/plugin
 
-Please see [License File](LICENSE) for more information.
+3. Go to your Shopware backend panel » Configuration » Plugin Manager » Installed.
+
+4. Click on Cryptocurrency Payments via Coinpayments.
+
+5. Click on Install and Activate.
+
+6. Enter your API credentials (Auth Token). Configure Receive Currency, select Environment and click Save.
