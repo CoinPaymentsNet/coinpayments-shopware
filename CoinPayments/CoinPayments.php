@@ -23,7 +23,7 @@ class CoinPayments extends Plugin
             'position' => 0,
             'template' => 'coinpayments.tpl',
             'additionalDescription' =>
-                '<img src="custom/plugins/CoinPayments/plugin.png" alt="Cryptocurrency Payments via Coinpayments" style="max-width:15%;" />',
+                '<img src="custom/plugins/CoinPayments/plugin.svg" alt="Cryptocurrency Payments via Coinpayments" style="max-width:15%;" />',
         ];
         $installer->createOrUpdate($context->getPlugin(), $options);
     }
