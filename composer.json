@@ -1,0 +1,35 @@
+{
+    "name": "coinpayments/shopware",
+    "description": "This plugin enables you to setup the Coinpayments.NET payment gateway on your Shopware website.",
+    "version": "2.0.0",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Coinpayments.NET",
+            "homepage": "https://alpha.coinpayments.net/"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "shopware/core": ">=6.1",
+        "shopware/administration": ">=6.1",
+        "shopware/storefront": ">=6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoinPayments\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "CoinPayments\\CoinPayments",
+        "label": {
+            "de-DE": "CoinPayments",
+            "en-GB": "CoinPayments"
+        },
+        "description": {
+            "de-DE": "CoinPayments Zahlungsgateway",
+            "en-GB": "CoinPayments Payment Gateway"
+        }
+    }
+}

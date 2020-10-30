@@ -1,0 +1,30 @@
+{
+  "coinpayments-payment": {
+      "module": {
+          "title": "CoinPayments.NET",
+          "description": "CoinPayments.NET Payments"
+      },
+      "configForm": {
+          "title": "CoinPayments.NET Payments",
+          "test": "Test API-Credentials",
+          "save": "Save",
+          "messages": {
+              "messageNotBlank": "This Field must not be empty.",
+              "titleSuccess": "Success",
+              "titleError": "Error",
+              "messageTestSuccess": "The API credentials are correct.",
+              "messageTestError": "The API credentials are wrong.",
+              "messageTestErrorGeneral": "The API access data could not be verified.",
+              "messageSaveSuccess": "The plugin settings have been saved.",
+              "messageSaveError": "The plugin settings could not be saved."
+          }
+      },
+      "supportModal": {
+          "supportButton": "Support",
+          "title": "How Can We Help You?",
+          "supportDesc": "Contact our support team",
+          "manualButton": "Manual",
+          "manualDesc": "Read our integration manual"
+      }
+  }
+}

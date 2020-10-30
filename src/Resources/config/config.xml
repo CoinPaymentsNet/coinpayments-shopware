@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Coinpayments.NET Configuration</title>
+        <input-field type="text">
+            <name>clientId</name>
+            <label lang="en-GB">Client ID</label>
+            <helpText>Client ID from coinpayments account</helpText>
+        </input-field>
+        <input-field type="bool">
+            <name>webhooks</name>
+            <label>Webhooks</label>
+            <value>false</value>
+        </input-field>
+        <input-field type="text">
+            <name>clientSecret</name>
+            <label>Client Secret</label>
+            <helpText>Client Secret from coinpayments account</helpText>
+        </input-field>
+    </card>
+</config>
