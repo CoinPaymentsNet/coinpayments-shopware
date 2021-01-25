@@ -14,6 +14,7 @@ class Coinpayments
 {
 
     const API_URL = 'https://api.coinpayments.net';
+    const CHECKOUT_URL = 'https://checkout.coinpayments.net';
     const API_VERSION = '1';
 
     const API_SIMPLE_INVOICE_ACTION = 'invoices';
@@ -22,6 +23,10 @@ class Coinpayments
     const API_CURRENCIES_ACTION = 'currencies';
     const API_CHECKOUT_ACTION = 'checkout';
     const FIAT_TYPE = 'fiat';
+
+    const PAID_EVENT = 'Paid';
+    const CANCELLED_EVENT = 'Cancelled';
+    const PENDING_EVENT = 'Pending';
 
     const WEBHOOK_NOTIFICATION_URL = '/PaymentCoinpayments/notification';
     /**
@@ -46,20 +51,16 @@ class Coinpayments
      * @return bool|mixed
      * @throws Exception
      */
-    public function createWebHook($client_id, $client_secret, $notification_url)
+    public function createWebHook($client_id, $client_secret, $notification_url, $event)
     {
 
         $action = sprintf(self::API_WEBHOOK_ACTION, $client_id);
 
         $params = array(
             "notificationsUrl" => $notification_url,
-            "notifications" => array(
-                "invoiceCreated",
-                "invoicePending",
-                "invoicePaid",
-                "invoiceCompleted",
-                "invoiceCancelled",
-            ),
+            "notifications" => [
+                sprintf("invoice%s", $event)
+            ],
         );
 
         return $this->sendRequest('POST', $action, $client_id, $params, $client_secret);
@@ -170,9 +171,9 @@ class Coinpayments
     /**
      * @return string
      */
-    public function getNotificationUrl()
+    public function getNotificationUrl($event, $client_id)
     {
-        return sprintf('%s%s', $this->request->getSchemeAndHttpHost(), self::WEBHOOK_NOTIFICATION_URL);
+        return sprintf('%s/%s?clientId=%s&event=%', $this->request->getSchemeAndHttpHost(), self::WEBHOOK_NOTIFICATION_URL,$client_id,$event);
     }
 
     /**

@@ -72,7 +72,7 @@ class PaymentController extends StorefrontController
         if ($config['webhooks'] && !empty($signature)) {
             $request_data = json_decode($content, true);
 
-            if ($this->checkDataSignature($config, $signature, $content) && isset($request_data['invoice']['invoiceId'])) {
+            if ($this->checkDataSignature($config, $signature, $content, $request_data['invoice']['status']) && isset($request_data['invoice']['invoiceId'])) {
 
                 $invoice_str = $request_data['invoice']['invoiceId'];
                 $invoice_str = explode('|', $invoice_str);
@@ -98,11 +98,11 @@ class PaymentController extends StorefrontController
         die();
     }
 
-    public function checkDataSignature($config, $signature, $content)
+    public function checkDataSignature($config, $signature, $content, $event)
     {
         $api = new CoinPayments($this->storeService);
 
-        $request_url = $api->getNotificationUrl();
+        $request_url = $api->getNotificationUrl($event, $config['clientId']);
         $client_secret = $config['clientSecret'];
         $signature_string = sprintf('%s%s', $request_url, $content);
         $encoded_pure = $api->encodeSignatureString($signature_string, $client_secret);

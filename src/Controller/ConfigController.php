@@ -56,7 +56,9 @@ class ConfigController extends AbstractController
             if ($config['webhooks']) {
                 $webhooks_list = $api->getWebhooksList($clientId, $clientSecret);
                 if (!empty($webhooks_list)) {
-                    $notificationUrl = $api->getNotificationUrl();
+                    $notificationUrlCancelled = $api->getNotificationUrl(Coinpayments::CANCELLED_EVENT, $clientId);
+                    $notificationUrlPaid = $api->getNotificationUrl(Coinpayments::PAID_EVENT, $clientId);
+                    $notificationUrlPending = $api->getNotificationUrl(Coinpayments::PENDING_EVENT, $clientId);
 
                     $webhooks_urls_list = array();
                     if (!empty($webhooks_list['items'])) {
@@ -64,8 +66,14 @@ class ConfigController extends AbstractController
                             return $webHook['notificationsUrl'];
                         }, $webhooks_list['items']);
                     }
-                    if (!in_array($notificationUrl, $webhooks_urls_list)) {
-                        $api->createWebHook($clientId, $clientSecret, $notificationUrl);
+                    if (!in_array($notificationUrlCancelled, $webhooks_urls_list)) {
+                        $api->createWebHook($clientId, $clientSecret, $notificationUrlCancelled, Coinpayments::CANCELLED_EVENT);
+                    }
+                    if (!in_array($notificationUrlPaid, $webhooks_urls_list)) {
+                        $api->createWebHook($clientId, $clientSecret, $notificationUrlPaid, Coinpayments::PAID_EVENT);
+                    }
+                    if (!in_array($notificationUrlPending, $webhooks_urls_list)) {
+                        $api->createWebHook($clientId, $clientSecret, $notificationUrlPending, Coinpayments::PENDING_EVENT);
                     }
                 } else {
                     $error = 'Can\'t create webhook. Bad credentials.';
