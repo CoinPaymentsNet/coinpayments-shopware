@@ -74,7 +74,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         $config = $this->configService->getConfig();
         try {
 
-            $invoice = $this->createInvoice($config, $currency, $totalAmount, $transaction->getOrderTransaction()->getOrderId());
+            $invoice = $this->createInvoice($config, $currency, $totalAmount, $transaction->getOrderTransaction()->getOrderId(), $salesChannelContext->getSalesChannel()->getName());
 
             $params = array(
                 'invoice-id' => $invoice['id'],
@@ -121,7 +121,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
      * @return bool|mixed
      * @throws \Exception
      */
-    public function createInvoice($config, $currencyCode, $total, $orderId)
+    public function createInvoice($config, $currencyCode, $total, $orderId, $channelName)
     {
         $invoice = null;
         $api = new Coinpayments($this->storeService);
@@ -137,10 +137,10 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         $displayValue = $total;
 
         if ($config['webhooks']) {
-            $resp = $api->createMerchantInvoice($clientId, $clientSecret, $coinCurrency['id'], $invoiceId, $amount, $displayValue);
+            $resp = $api->createMerchantInvoice($clientId, $clientSecret, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName);
             $invoice = array_shift($resp['invoices']);
         } else {
-            $invoice = $api->createSimpleInvoice($clientId, $coinCurrency['id'], $invoiceId, $amount, $displayValue);
+            $invoice = $api->createSimpleInvoice($clientId, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName);
         }
 
         return $invoice;

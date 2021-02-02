@@ -75,7 +75,7 @@ class Coinpayments
      * @return bool|mixed
      * @throws Exception
      */
-    public function createSimpleInvoice($client_id, $currency_id = 5057, $invoice_id = 'Validate invoice', $amount = 1, $display_value = '0.01')
+    public function createSimpleInvoice($client_id, $currency_id = 5057, $invoice_id = 'Validate invoice', $amount = 1, $display_value = '0.01', $channelName)
     {
 
         $action = self::API_SIMPLE_INVOICE_ACTION;
@@ -90,7 +90,7 @@ class Coinpayments
             ),
         );
 
-        $params = $this->appendInvoiceMetadata($params);
+        $params = $this->appendInvoiceMetadata($params, 'notesToRecipient', $channelName);
         return $this->sendRequest('POST', $action, $client_id, $params);
     }
 
@@ -104,7 +104,7 @@ class Coinpayments
      * @return bool|mixed
      * @throws Exception
      */
-    public function createMerchantInvoice($client_id, $client_secret, $currency_id, $invoice_id, $amount, $display_value)
+    public function createMerchantInvoice($client_id, $client_secret, $currency_id, $invoice_id, $amount, $display_value, $channelName)
     {
 
         $action = self::API_MERCHANT_INVOICE_ACTION;
@@ -118,7 +118,7 @@ class Coinpayments
             ),
         );
 
-        $params = $this->appendInvoiceMetadata($params);
+        $params = $this->appendInvoiceMetadata($params, 'notes', $channelName);
         return $this->sendRequest('POST', $action, $client_id, $params, $client_secret);
     }
 
@@ -190,14 +190,14 @@ class Coinpayments
      * @param $request_data
      * @return mixed
      */
-    protected function appendInvoiceMetadata($request_data)
+    protected function appendInvoiceMetadata($request_data, $notes_field_name, $channelName)
     {
 
         $request_data['metadata'] = array(
             "integration" => sprintf("Shopwate_v%s", $this->storeService->getShopwareVersion()),
             "hostname" => $this->request->getSchemeAndHttpHost(),
         );
-
+        $request_data[$notes_field_name] = sprintf("%s / Store name: %s / Order # %s",$this->request->getSchemeAndHttpHost(), $channelName,explode('|', $request_data['invoiceId'])[1]);
         return $request_data;
     }
 
