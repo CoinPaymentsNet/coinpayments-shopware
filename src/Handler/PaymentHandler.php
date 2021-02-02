@@ -82,7 +82,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 'cancel-url' => $transaction->getReturnUrl(),
             );
 
-            $redirectUrl = sprintf('%s/%s?%s', Coinpayments::CHECKOUT_URL, Coinpayments::API_CHECKOUT_ACTION, http_build_query($params));
+            $redirectUrl = sprintf('%s/%s/?%s', Coinpayments::CHECKOUT_URL, Coinpayments::API_CHECKOUT_ACTION, http_build_query($params));
         } catch (\Exception $e) {
             throw new AsyncPaymentProcessException(
                 $transaction->getOrderTransaction()->getId(),
