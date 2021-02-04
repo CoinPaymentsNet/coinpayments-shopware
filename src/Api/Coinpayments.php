@@ -72,10 +72,11 @@ class Coinpayments
      * @param string $invoice_id
      * @param int $amount
      * @param string $display_value
+     * @param $billing_data
      * @return bool|mixed
      * @throws Exception
      */
-    public function createSimpleInvoice($client_id, $currency_id = 5057, $invoice_id = 'Validate invoice', $amount = 1, $display_value = '0.01', $channelName)
+    public function createSimpleInvoice($client_id, $currency_id = 5057, $invoice_id = 'Validate invoice', $amount = 1, $display_value = '0.01', $channelName, $billing_data)
     {
 
         $action = self::API_SIMPLE_INVOICE_ACTION;
@@ -90,6 +91,7 @@ class Coinpayments
             ),
         );
 
+        $params = $this->append_billing_data($params, $billing_data);
         $params = $this->appendInvoiceMetadata($params, 'notesToRecipient', $channelName);
         return $this->sendRequest('POST', $action, $client_id, $params);
     }
@@ -101,10 +103,11 @@ class Coinpayments
      * @param $invoice_id
      * @param $amount
      * @param $display_value
+     * @param $billing_data
      * @return bool|mixed
      * @throws Exception
      */
-    public function createMerchantInvoice($client_id, $client_secret, $currency_id, $invoice_id, $amount, $display_value, $channelName)
+    public function createMerchantInvoice($client_id, $client_secret, $currency_id, $invoice_id, $amount, $display_value, $channelName, $billing_data)
     {
 
         $action = self::API_MERCHANT_INVOICE_ACTION;
@@ -118,8 +121,26 @@ class Coinpayments
             ),
         );
 
+        $params = $this->append_billing_data($params, $billing_data);
         $params = $this->appendInvoiceMetadata($params, 'notes', $channelName);
         return $this->sendRequest('POST', $action, $client_id, $params, $client_secret);
+    }
+
+    /**
+     * @param $request_data
+     * @param $billing_data
+     * @return array
+     */
+    function append_billing_data($request_data, $billing_data)
+    {
+        $request_data['buyer'] = array(
+            "name" => array(
+                "firstName" => $billing_data->getFirstName(),
+                "lastName" => $billing_data->getLastName()
+            ),
+            "emailAddress" => $billing_data->getEmail()
+        );
+        return $request_data;
     }
 
     /**
