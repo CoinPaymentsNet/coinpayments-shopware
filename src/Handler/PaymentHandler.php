@@ -82,7 +82,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 'cancel-url' => $transaction->getReturnUrl(),
             );
 
-            $redirectUrl = sprintf('%s/%s?%s', Coinpayments::API_URL, Coinpayments::API_CHECKOUT_ACTION, http_build_query($params));
+            $redirectUrl = sprintf('%s/%s/?%s', Coinpayments::CHECKOUT_URL, Coinpayments::API_CHECKOUT_ACTION, http_build_query($params));
         } catch (\Exception $e) {
             throw new AsyncPaymentProcessException(
                 $transaction->getOrderTransaction()->getId(),
@@ -103,9 +103,10 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
     public function finalize(AsyncPaymentTransactionStruct $transaction, Request $request, SalesChannelContext $salesChannelContext): void
     {
         $invoice = $request->get("invoice");
-        if ($invoice['status'] == 'Completed') {
+        $completed_statuses = array(Coinpayments::PAID_EVENT, Coinpayments::PENDING_EVENT);
+        if (in_array($invoice['status'], $completed_statuses)) {
             $this->transactionStateHandler->paid($transaction->getOrderTransaction()->getId(), $salesChannelContext->getContext());
-        } elseif ($invoice['status'] == 'Cancelled') {
+        } elseif ($invoice['status'] == Coinpayments::CANCELLED_EVENT) {
             $this->transactionStateHandler->cancel($transaction->getOrderTransaction()->getId(), $salesChannelContext->getContext());
         } else {
             $this->transactionStateHandler->process($transaction->getOrderTransaction()->getId(), $salesChannelContext->getContext());
