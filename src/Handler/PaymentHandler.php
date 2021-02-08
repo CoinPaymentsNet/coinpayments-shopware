@@ -74,7 +74,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         $config = $this->configService->getConfig();
         try {
 
-            $invoice = $this->createInvoice($config, $currency, $totalAmount, $transaction->getOrderTransaction()->getOrderId(), $salesChannelContext->getSalesChannel()->getName());
+            $invoice = $this->createInvoice($config, $currency, $totalAmount, $transaction->getOrderTransaction()->getOrderId(), $salesChannelContext->getSalesChannel()->getName(), $transaction->getOrder()->getOrderCustomer());
 
             $params = array(
                 'invoice-id' => $invoice['id'],
@@ -118,10 +118,11 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
      * @param $currencyCode
      * @param $total
      * @param $orderId
+     * @param $billing_data
      * @return bool|mixed
      * @throws \Exception
      */
-    public function createInvoice($config, $currencyCode, $total, $orderId, $channelName)
+    public function createInvoice($config, $currencyCode, $total, $orderId, $channelName, $billing_data)
     {
         $invoice = null;
         $api = new Coinpayments($this->storeService);
@@ -137,10 +138,10 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         $displayValue = $total;
 
         if ($config['webhooks']) {
-            $resp = $api->createMerchantInvoice($clientId, $clientSecret, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName);
+            $resp = $api->createMerchantInvoice($clientId, $clientSecret, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName, $billing_data);
             $invoice = array_shift($resp['invoices']);
         } else {
-            $invoice = $api->createSimpleInvoice($clientId, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName);
+            $invoice = $api->createSimpleInvoice($clientId, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName, $billing_data);
         }
 
         return $invoice;
