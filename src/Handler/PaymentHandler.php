@@ -137,11 +137,20 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         $amount = number_format($total, $coinCurrency['decimalPlaces'], '', '');;
         $displayValue = $total;
 
+        $invoice_params = array(
+            'invoice_id' => $invoiceId,
+            'currency_id' => $coinCurrency['id'],
+            'amount' => $amount,
+            'display_value' => $displayValue,
+            'billing_data' => $billing_data,
+            'notes_link' => $api->request->getSchemeAndHttpHost() . "/public/admin#/sw/order/detail/" . $billing_data->getOrderId(),
+        );
+
         if ($config['webhooks']) {
-            $resp = $api->createMerchantInvoice($clientId, $clientSecret, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName, $billing_data);
+            $resp = $api->createMerchantInvoice($clientId, $clientSecret, $invoice_params);
             $invoice = array_shift($resp['invoices']);
         } else {
-            $invoice = $api->createSimpleInvoice($clientId, $coinCurrency['id'], $invoiceId, $amount, $displayValue, $channelName, $billing_data);
+            $invoice = $api->createSimpleInvoice($clientId, $invoice_params);
         }
 
         return $invoice;
