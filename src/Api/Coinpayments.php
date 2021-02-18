@@ -88,7 +88,7 @@ class Coinpayments
             'notesToRecipient' => $invoice_params['notes_link']
         );
 
-        $params = $this->append_billing_data($params, $invoice_params['billing_data']);
+        $params = $this->append_billing_data($params, $invoice_params['billing_data'],  $invoice_params['billing_data_address']);
         $params = $this->appendInvoiceMetadata($params);
         return $this->sendRequest('POST', $action, $client_id, $params);
     }
@@ -115,7 +115,7 @@ class Coinpayments
             'notesToRecipient' => $invoice_params['notes_link']
         );
 
-        $params = $this->append_billing_data($params, $invoice_params['billing_data']);
+        $params = $this->append_billing_data($params, $invoice_params['billing_data'],  $invoice_params['billing_data_address']);
         $params = $this->appendInvoiceMetadata($params);
         return $this->sendRequest('POST', $action, $client_id, $params, $client_secret);
     }
@@ -125,7 +125,7 @@ class Coinpayments
      * @param $billing_data
      * @return array
      */
-    function append_billing_data($request_data, $billing_data)
+    function append_billing_data($request_data, $billing_data, $billing_data_address)
     {
         $request_data['buyer'] = array(
             "name" => array(
@@ -134,6 +134,18 @@ class Coinpayments
             ),
             "emailAddress" => $billing_data->getEmail()
         );
+        if (preg_match('/^([A-Z]{2})$/', $billing_data_address->getCountry()->getIso())
+        && !empty($billing_data_address->getStreet())
+            && !empty($billing_data_address->getCity())
+        ) {
+            $request_data['buyer']['address'] = array(
+                'address1' => $billing_data_address->getStreet(),
+                'provinceOrState' => $billing_data_address->getCountryState()->getName(),
+                'city' => $billing_data_address->getCity(),
+                'countryCode' => $billing_data_address->getCountry()->getIso(),
+                'postalCode' => $billing_data_address->getZipcode(),
+            );
+        }
         return $request_data;
     }
 
