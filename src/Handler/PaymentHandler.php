@@ -74,7 +74,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         $config = $this->configService->getConfig();
         try {
 
-            $invoice = $this->createInvoice($config, $currency, $totalAmount, $transaction->getOrderTransaction()->getOrderId(), $salesChannelContext->getSalesChannel()->getName(), $transaction->getOrder()->getOrderCustomer());
+            $invoice = $this->createInvoice($config, $currency, $totalAmount, $transaction->getOrderTransaction()->getOrderId(), $salesChannelContext->getSalesChannel()->getName(), $transaction->getOrder()->getOrderCustomer(), $salesChannelContext->getShippingLocation()->getAddress());
 
             $params = array(
                 'invoice-id' => $invoice['id'],
@@ -121,7 +121,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
      * @return bool|mixed
      * @throws \Exception
      */
-    public function createInvoice($config, $currencyCode, $total, $orderId, $channelName, $billing_data)
+    public function createInvoice($config, $currencyCode, $total, $orderId, $channelName, $billing_data, $billing_data_address)
     {
         $invoice = null;
         $api = new Coinpayments($this->storeService);
@@ -142,6 +142,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
             'amount' => $amount,
             'display_value' => $displayValue,
             'billing_data' => $billing_data,
+            'billing_data_address' => $billing_data_address,
             'notes_link' => $api->request->getSchemeAndHttpHost() . "/public/admin#/sw/order/detail/" . $billing_data->getOrderId(),
         );
 
