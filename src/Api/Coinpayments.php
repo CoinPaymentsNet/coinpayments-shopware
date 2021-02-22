@@ -26,7 +26,6 @@ class Coinpayments
 
     const PAID_EVENT = 'Paid';
     const CANCELLED_EVENT = 'Cancelled';
-    const PENDING_EVENT = 'Pending';
 
     const WEBHOOK_NOTIFICATION_URL = '/PaymentCoinpayments/notification';
     /**
@@ -88,7 +87,7 @@ class Coinpayments
             'notesToRecipient' => $invoice_params['notes_link']
         );
 
-        $params = $this->append_billing_data($params, $invoice_params['billing_data'],  $invoice_params['billing_data_address']);
+        $params = $this->append_billing_data($params, $invoice_params['billing_data']);
         $params = $this->appendInvoiceMetadata($params);
         return $this->sendRequest('POST', $action, $client_id, $params);
     }

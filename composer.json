@@ -29,7 +29,7 @@
         },
         "description": {
             "de-DE": "CoinPayments Zahlungsgateway",
-            "en-GB": "CoinPayments Payment Gateway"
+            "en-GB": "Pay with Bitcoin, Litecoin, or other altcoins via <a target=_blank href='https://alpha.coinpayments.net/' title='CoinPayments.net'>CoinPayments.net</a>"
         }
     }
 }

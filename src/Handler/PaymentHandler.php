@@ -103,8 +103,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
     public function finalize(AsyncPaymentTransactionStruct $transaction, Request $request, SalesChannelContext $salesChannelContext): void
     {
         $invoice = $request->get("invoice");
-        $completed_statuses = array(Coinpayments::PAID_EVENT, Coinpayments::PENDING_EVENT);
-        if (in_array($invoice['status'], $completed_statuses)) {
+        if ($invoice['status'] == Coinpayments::PAID_EVENT) {
             $this->transactionStateHandler->paid($transaction->getOrderTransaction()->getId(), $salesChannelContext->getContext());
         } elseif ($invoice['status'] == Coinpayments::CANCELLED_EVENT) {
             $this->transactionStateHandler->cancel($transaction->getOrderTransaction()->getId(), $salesChannelContext->getContext());
