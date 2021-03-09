@@ -143,7 +143,11 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
             'display_value' => $displayValue,
             'billing_data' => $billing_data,
             'billing_data_address' => $billing_data_address,
-            'notes_link' => $api->request->getSchemeAndHttpHost() . "/public/admin#/sw/order/detail/" . $billing_data->getOrderId(),
+            'notes_link' =>sprintf(
+                "%s|Store name: %s|Order #%s",
+                $api->request->getSchemeAndHttpHost() . "/public/admin#/sw/order/detail/" . $billing_data->getOrderId(),
+                $channelName,
+                $orderId),
         );
 
         if ($config['webhooks']) {
