@@ -145,7 +145,6 @@ class Coinpayments
         ) {
             $request_data['buyer']['address'] = array(
                 'address1' => $billing_data_address->getStreet(),
-                'provinceOrState' => $billing_data_address->getCountryState()->getName(),
                 'city' => $billing_data_address->getCity(),
                 'countryCode' => $billing_data_address->getCountry()->getIso(),
                 'postalCode' => $billing_data_address->getZipcode(),
