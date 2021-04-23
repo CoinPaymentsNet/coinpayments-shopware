@@ -71,7 +71,13 @@ class Coinpayments
      * @return bool|mixed
      * @throws Exception
      */
-    public function createSimpleInvoice($client_id, $invoice_params)
+    public function createSimpleInvoice($client_id, $invoice_params = array(
+        'invoice_id' => 'Validate invoice',
+        'currency_id' => 5057,
+        'amount' => 1,
+        'display_value' => '0.01',
+        'notes_link' => 'Validate invoice'
+    ))
     {
 
         $action = self::API_SIMPLE_INVOICE_ACTION;
@@ -87,7 +93,7 @@ class Coinpayments
             'notesToRecipient' => $invoice_params['notes_link']
         );
 
-        $params = $this->append_billing_data($params, $invoice_params['billing_data']);
+        $params = $this->append_billing_data($params, $invoice_params['billing_data'], $invoice_params['billing_data_address']);
         $params = $this->appendInvoiceMetadata($params);
         return $this->sendRequest('POST', $action, $client_id, $params);
     }
@@ -139,7 +145,6 @@ class Coinpayments
         ) {
             $request_data['buyer']['address'] = array(
                 'address1' => $billing_data_address->getStreet(),
-                'provinceOrState' => $billing_data_address->getCountryState()->getName(),
                 'city' => $billing_data_address->getCity(),
                 'countryCode' => $billing_data_address->getCountry()->getIso(),
                 'postalCode' => $billing_data_address->getZipcode(),
