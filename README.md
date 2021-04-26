@@ -10,14 +10,11 @@ The information presented on alpha.coinpayments.net (the "Demo Site") is for dem
 
 In no event will CoinPayments Inc. or its directors, officers, employees, shareholders, service providers or agents, be liable to you, or anyone else, for any decision(s) made or action(s) taken in reliance upon the information contained in the Demo Site, nor for any direct, indirect, incidental, special, exemplary, punitive, consequential, or other damages whatsoever (including, but not limited to, liability for loss of use, funds, data or profits) whether in an action of contract, statute, tort or otherwise, relating to the use of the Demo Site.
 
-#CoinPayments-Shopware
-
-Installation:
-=============
-
-1. Download plugin
-2. Go to Settings > System > Plugins and upload downloaded archive with "Upload plugin" button 
-3. Install Coinpayments Plugin and activate it.
-4. Go to Coinpayments.NET config submenu. 
-5. Enter your Coinpayments credentials and enable webhooks to receive payment updates. 
-6. Go to your Sales Channel settings and add Coinpayments to "Payment methods" list.
+# Follow the steps below to download this plugin:
+  
+1. Log into your https://alpha.coinpayments.net/ account
+2. Click on Business Tools -> Intergrations -> Pre-built Plugins -> + add Intergration button
+3. Select this plug-in from the dropdown menu
+4. Click the download plugin button  
+   
+![Screenshot 2021-04-26 042000](https://user-images.githubusercontent.com/72504315/116074495-b2a4d300-a646-11eb-9afd-06fb52fda01c.png)
