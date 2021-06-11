@@ -145,7 +145,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
             'billing_data_address' => $billing_data_address,
             'notes_link' =>sprintf(
                 "%s|Store name: %s|Order #%s",
-                $api->request->getSchemeAndHttpHost() . "/public/admin#/sw/order/detail/" . $billing_data->getOrderId(),
+                $api->request->getSchemeAndHttpHost() . "/admin#/sw/order/detail/" . $billing_data->getOrderId(),
                 $channelName,
                 $orderId),
         );
