@@ -204,7 +204,7 @@ class Coinpayments
      */
     public function getNotificationUrl($event, $client_id)
     {
-        return sprintf('%s/%s?clientId=%s&event=%', $this->request->getSchemeAndHttpHost(), self::WEBHOOK_NOTIFICATION_URL,$client_id,$event);
+        return sprintf('%s/%s?clientId=%s&event=%s', $this->request->getSchemeAndHttpHost(), self::WEBHOOK_NOTIFICATION_URL,$client_id,$event);
     }
 
     /**
