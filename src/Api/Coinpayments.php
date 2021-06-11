@@ -225,7 +225,7 @@ class Coinpayments
     {
 
         $request_data['metadata'] = array(
-            "integration" => sprintf("Shopwate_v%s", $this->storeService->getShopwareVersion()),
+            "integration" => sprintf("Shopware_v%s", $this->storeService->getShopwareVersion()),
             "hostname" => $this->request->getSchemeAndHttpHost(),
         );
         return $request_data;
