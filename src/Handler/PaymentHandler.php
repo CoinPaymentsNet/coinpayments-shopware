@@ -72,14 +72,15 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         $totalAmount = $transaction->getOrderTransaction()->getAmount()->getTotalPrice();
         $currency = $salesChannelContext->getCurrency()->getIsoCode();
         $config = $this->configService->getConfig();
+        $api = new Coinpayments($this->storeService);
         try {
 
             $invoice = $this->createInvoice($config, $currency, $totalAmount, $transaction->getOrderTransaction()->getOrderId(), $salesChannelContext->getSalesChannel()->getName(), $transaction->getOrder()->getOrderCustomer(), $salesChannelContext->getShippingLocation()->getAddress());
 
             $params = array(
                 'invoice-id' => $invoice['id'],
-                'success-url' => $transaction->getReturnUrl(),
-                'cancel-url' => $transaction->getReturnUrl(),
+                'success-url' => $api->request->getSchemeAndHttpHost() . '/checkout/finish?orderId=' . $transaction->getOrderTransaction()->getOrderId(),
+                'cancel-url' => $api->request->getSchemeAndHttpHost() . '/checkout/finish?orderId=' . $transaction->getOrderTransaction()->getOrderId(),
             );
 
             $redirectUrl = sprintf('%s/%s/?%s', Coinpayments::CHECKOUT_URL, Coinpayments::API_CHECKOUT_ACTION, http_build_query($params));
