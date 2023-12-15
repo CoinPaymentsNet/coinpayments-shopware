@@ -152,14 +152,10 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 $orderNumber),
         );
 
-        if ($config['webhooks']) {
-            $resp = $api->createMerchantInvoice($clientId, $clientSecret, $invoice_params);
-            $invoice = array_shift($resp['invoices']);
-        } else {
-            $invoice = $api->createSimpleInvoice($clientId, $invoice_params);
-        }
 
-        return $invoice;
+        $resp = $api->createMerchantInvoice($clientId, $clientSecret, $invoice_params);
+
+        return array_shift($resp['invoices']);
     }
 
 }

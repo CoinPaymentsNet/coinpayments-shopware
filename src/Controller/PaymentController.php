@@ -63,18 +63,17 @@ class PaymentController extends StorefrontController
      */
     public function notification(Request $request, SalesChannelContext $salesChannelContext): Response
     {
-
-
         $content = file_get_contents('php://input');
         $config = $this->configService->getConfig();
         $signature = $request->headers->get('x_coinpayments_signature');
 
         if ($config['webhooks'] && !empty($signature)) {
             $request_data = json_decode($content, true);
+            $status = $request_data['invoice']['state'];
 
-            if ($this->checkDataSignature($config, $signature, $content, $request_data['invoice']['status']) && isset($request_data['invoice']['invoiceId'])) {
+            if ($this->checkDataSignature($config, $signature, $content, $status) && isset($request_data['invoice']['invoice_id'])) {
 
-                $invoice_str = $request_data['invoice']['invoiceId'];
+                $invoice_str = $request_data['invoice']['invoice_id'];
                 $invoice_str = explode('|', $invoice_str);
                 $host_hash = array_shift($invoice_str);
                 $invoice_id = array_shift($invoice_str);

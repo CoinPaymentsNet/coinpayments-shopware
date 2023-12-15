@@ -74,12 +74,20 @@ class ConfigController extends AbstractController
                 } else {
                     $error = 'Can\'t create webhook. Bad credentials.';
                 }
-            } else {
-                $invoice = $api->createSimpleInvoice($clientId);
-                if (empty($invoice['id'])) {
-                    $error = 'Can\'t create validation invoice. Bad credentials.';
-                }
             }
+
+            $invoice_params = [
+                'invoice_id' => 'Validate invoice',
+                'currency_id' => 5057,
+                'amount' => 1,
+                'display_value' => '0.01',
+                'notes_link' => 'Validate invoice'
+            ];
+            $invoice = $api->createMerchantInvoice($clientId, $clientSecret, $invoice_params);
+            if (empty($invoice['id'])) {
+                $error = 'Can\'t create validation invoice. Bad credentials.';
+            }
+
         } catch (\Exception $e) {
             $error = $e->getMessage();
         }

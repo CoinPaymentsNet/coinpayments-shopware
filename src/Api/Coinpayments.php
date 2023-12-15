@@ -67,39 +67,6 @@ class Coinpayments
 
     /**
      * @param $client_id
-     * @param $invoice_params
-     * @return bool|mixed
-     * @throws Exception
-     */
-    public function createSimpleInvoice($client_id, $invoice_params = array(
-        'invoice_id' => 'Validate invoice',
-        'currency_id' => 5057,
-        'amount' => 1,
-        'display_value' => '0.01',
-        'notes_link' => 'Validate invoice'
-    ))
-    {
-
-        $action = self::API_SIMPLE_INVOICE_ACTION;
-
-        $params = array(
-            'clientId' => $client_id,
-            'invoiceId' => $invoice_params['invoice_id'],
-            'amount' => array(
-                'currencyId' => $invoice_params['currency_id'],
-                "displayValue" => $invoice_params['display_value'],
-                'value' => $invoice_params['amount']
-            ),
-            'notesToRecipient' => $invoice_params['notes_link']
-        );
-
-        $params = $this->append_billing_data($params, $invoice_params['billing_data'], $invoice_params['billing_data_address']);
-        $params = $this->appendInvoiceMetadata($params);
-        return $this->sendRequest('POST', $action, $client_id, $params);
-    }
-
-    /**
-     * @param $client_id
      * @param $client_secret
      * @param $invoice_params
      * @return bool|mixed
@@ -114,14 +81,18 @@ class Coinpayments
             'invoiceId' => $invoice_params['invoice_id'],
             'amount' => array(
                 'currencyId' => $invoice_params['currency_id'],
-                "displayValue" => $invoice_params['display_value'],
-                'value' => $invoice_params['amount']
+                "displayValue" => (string)$invoice_params['display_value'],
+                'value' => (string)$invoice_params['amount']
             ),
             'notesToRecipient' => $invoice_params['notes_link']
         );
 
-        $params = $this->append_billing_data($params, $invoice_params['billing_data'],  $invoice_params['billing_data_address']);
+        if (is_array($invoice_params['billing_data']) && !empty($invoice_params['billing_data'])) {
+            $params = $this->append_billing_data($params, $invoice_params['billing_data'], $invoice_params['billing_data_address']);
+        }
+
         $params = $this->appendInvoiceMetadata($params);
+
         return $this->sendRequest('POST', $action, $client_id, $params, $client_secret);
     }
 
@@ -242,11 +213,6 @@ class Coinpayments
      */
     protected function createSignature($method, $api_url, $client_id, $date, $client_secret, $params)
     {
-
-        if (!empty($params)) {
-            $params = json_encode($params);
-        }
-
         $signature_data = array(
             chr(239),
             chr(187),
@@ -254,9 +220,11 @@ class Coinpayments
             $method,
             $api_url,
             $client_id,
-            $date->format('c'),
-            $params
+            $date->format('Y-m-d\TH:i:s'),
         );
+        if (!empty($params)) {
+            $signature_data[] = json_encode($params);
+        }
 
         $signature_string = implode('', $signature_data);
 
@@ -304,7 +272,7 @@ class Coinpayments
             if ($client_secret) {
                 $signature = $this->createSignature($method, $api_url, $client_id, $date, $client_secret, $params);
                 $headers[] = 'X-CoinPayments-Client: ' . $client_id;
-                $headers[] = 'X-CoinPayments-Timestamp: ' . $date->format('c');
+                $headers[] = 'X-CoinPayments-Timestamp: ' . $date->format('Y-m-d\TH:i:s');
                 $headers[] = 'X-CoinPayments-Signature: ' . $signature;
 
             }
