@@ -1,3 +1,5 @@
+> NOTICE: Migrated to [CoinPaymentsNet/plugin-shopware](https://github.com/CoinPaymentsNet/plugin-shopware).
+
 <h3>Install via FTP</h3>
 1. Download plugin
 
